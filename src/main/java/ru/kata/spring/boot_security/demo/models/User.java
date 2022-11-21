@@ -46,15 +46,24 @@ public class User implements UserDetails {
     @Size(min = 2, message = "Invalid password")
     private String password;
 
-    @ManyToMany(fetch = FetchType.LAZY, cascade = CascadeType.PERSIST)
+    @ManyToMany(cascade = CascadeType.ALL)
     @JoinTable(name = "users_roles",
             joinColumns = @JoinColumn(name = "user_id"),
             inverseJoinColumns = @JoinColumn(name = "role_id"))
-    private Set<Role> roles = new HashSet<>();
+    private Set<Role> roles;
 
     public User() {
     }
 
+    public User(int id, String username, String name, String lastName, int age, String password, Set<Role> roles) {
+        this.id = id;
+        this.username = username;
+        this.name = name;
+        this.lastName = lastName;
+        this.age = age;
+        this.password = password;
+        this.roles = roles;
+    }
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {

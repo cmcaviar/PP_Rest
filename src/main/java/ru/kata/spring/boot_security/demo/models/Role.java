@@ -1,5 +1,6 @@
 package ru.kata.spring.boot_security.demo.models;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.stereotype.Component;
 import javax.persistence.*;
@@ -18,7 +19,7 @@ public class Role implements GrantedAuthority {
     private int id;
     @Column(name = "name")
     private String name;
-    @Transient
+    @JsonBackReference
     @ManyToMany(mappedBy = "roles")
     private Set<User> users;
 
@@ -70,9 +71,8 @@ public class Role implements GrantedAuthority {
             return false;
         }
         Role role = (Role) o;
-        return Objects.equals(id, role.id) &&
-                Objects.equals(name, role.name) &&
-                Objects.equals(users, role.users);
+        return Objects.equals(id, role.id) ||
+                Objects.equals(name, role.name);
     }
 
     @Override
