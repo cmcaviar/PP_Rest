@@ -1,6 +1,5 @@
 package ru.kata.spring.boot_security.demo.models;
 
-import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Component;
@@ -10,7 +9,6 @@ import javax.validation.constraints.Min;
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.Size;
 import java.util.Collection;
-import java.util.HashSet;
 import java.util.Objects;
 import java.util.Set;
 
@@ -46,7 +44,7 @@ public class User implements UserDetails {
     @Size(min = 2, message = "Invalid password")
     private String password;
 
-    @ManyToMany(cascade = CascadeType.ALL)
+    @ManyToMany(cascade = CascadeType.PERSIST)
     @JoinTable(name = "users_roles",
             joinColumns = @JoinColumn(name = "user_id"),
             inverseJoinColumns = @JoinColumn(name = "role_id"))
@@ -55,15 +53,6 @@ public class User implements UserDetails {
     public User() {
     }
 
-    public User(int id, String username, String name, String lastName, int age, String password, Set<Role> roles) {
-        this.id = id;
-        this.username = username;
-        this.name = name;
-        this.lastName = lastName;
-        this.age = age;
-        this.password = password;
-        this.roles = roles;
-    }
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
@@ -164,8 +153,7 @@ public class User implements UserDetails {
                 Objects.equals(name, user.name) &&
                 Objects.equals(lastName, user.lastName) &&
                 Objects.equals(username, user.username) &&
-                Objects.equals(password, user.password) &&
-                Objects.equals(roles, user.roles);
+                Objects.equals(password, user.password);
     }
 
     @Override

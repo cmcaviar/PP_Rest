@@ -1,22 +1,21 @@
 package ru.kata.spring.boot_security.demo.controllers;
 
 
+import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import ru.kata.spring.boot_security.demo.models.Role;
 import ru.kata.spring.boot_security.demo.models.User;
 import ru.kata.spring.boot_security.demo.service.UserService;
 
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
 
 @org.springframework.web.bind.annotation.RestController
+@CrossOrigin
 @RequestMapping("/api")
 public class RestController {
     private final UserService userService;
+
 
     @Autowired
     public RestController(UserService userService) {
@@ -44,9 +43,7 @@ public class RestController {
 
     @PostMapping("/users")
     public ResponseEntity<?> addUser(@RequestBody User user) {
-      //  Role role1 = new Role("ROLE_USER");
         try {
-        //    User usr = new User(22, "hhh@m.ru", "jjj", "nnn", 10, "a", Set.of(role1));
             userService.saveUser(user);
             return new ResponseEntity<>(user, HttpStatus.CREATED);
         } catch (Exception e) {
@@ -69,4 +66,5 @@ public class RestController {
         userService.deleteUserById(id);
         return ResponseEntity.ok().build();
     }
+
 }
