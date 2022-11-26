@@ -10,12 +10,8 @@ import ru.kata.spring.boot_security.demo.models.Role;
 import ru.kata.spring.boot_security.demo.models.User;
 import ru.kata.spring.boot_security.demo.repository.RoleRepository;
 import ru.kata.spring.boot_security.demo.repository.UserRepository;
-
-import javax.persistence.EntityManager;
-import java.util.Collections;
-import java.util.HashSet;
 import java.util.List;
-import java.util.Set;
+
 
 
 @Service
@@ -24,14 +20,14 @@ public class UserServiceImpl implements UserService {
     private final UserRepository userRepository;
     private final RoleRepository roleRepository;
     private final BCryptPasswordEncoder passwordEncoder;
-    private final EntityManager entityManager;
+
 
     @Autowired
-    public UserServiceImpl(UserRepository userRepository, RoleRepository roleRepository, @Lazy BCryptPasswordEncoder passwordEncoder, EntityManager entityManager) {
+    public UserServiceImpl(UserRepository userRepository, RoleRepository roleRepository, @Lazy BCryptPasswordEncoder passwordEncoder) {
         this.userRepository = userRepository;
         this.roleRepository = roleRepository;
         this.passwordEncoder = passwordEncoder;
-        this.entityManager = entityManager;
+
     }
 
 
@@ -53,9 +49,8 @@ public class UserServiceImpl implements UserService {
         if (!userFromDb.getPassword().equals(user.getPassword())) {
             user.setPassword(passwordEncoder.encode(user.getPassword()));
         }
-        System.out.println(user.getRoles());
         userRepository.save(user);
-      //  entityManager.merge(user);
+
     }
 
     @Override
@@ -76,23 +71,15 @@ public class UserServiceImpl implements UserService {
     @Override
     public void saveUser(User user) {
         user.setPassword(passwordEncoder.encode(user.getPassword()));
-        System.err.println(user.getId());
-        System.err.println(user.getRoles());
-       // user.setId(6);
         userRepository.save(user);
-        System.err.println(user.getId());
-      //  entityManager.persist(usr);
-
     }
     @Override
     @Transactional
     public void deleteUserById(int id) {
-        System.out.println(getUserById(id).getRoles());
         userRepository.delete(getUserById(id));
     }
 
     public Role getRoleById(int id) {
         return roleRepository.findById(id).orElse(null);
     }
-
 }

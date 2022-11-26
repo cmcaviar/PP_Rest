@@ -1,7 +1,5 @@
 package ru.kata.spring.boot_security.demo.controllers;
 
-
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -26,7 +24,7 @@ public class RestController {
     }
 
     @GetMapping("/users")
-    public ResponseEntity<?> showAllUsers() {
+    public ResponseEntity<List<User>> showAllUsers() {
         try {
             return new ResponseEntity<>(userService.getAllUsers(), HttpStatus.OK);
         } catch (Exception e) {
@@ -36,7 +34,7 @@ public class RestController {
 
 
     @GetMapping("/users/{id}")
-    public ResponseEntity<?> showUser(@PathVariable("id") int id) {
+    public ResponseEntity<User> showUser(@PathVariable("id") int id) {
         try {
             return new ResponseEntity<>(userService.getUserById(id), HttpStatus.OK);
         } catch (Exception e) {
@@ -44,21 +42,19 @@ public class RestController {
         }
     }
 
-//    @PostMapping("/users")
-//    public ResponseEntity<User> addUser(@RequestBody User user) {
-//        try {
-//            userService.saveUser(user);
-//            return new ResponseEntity<>(user, HttpStatus.CREATED);
-//        } catch (Exception e) {
-//            return new ResponseEntity<>(HttpStatus.NOT_IMPLEMENTED);
-//        }
-//    }
-@PostMapping("/users")
-public ResponseEntity<User> addUser(@RequestBody User user) {
+    @PostMapping("/users")
+    public ResponseEntity<User> addUser(@RequestBody User user) {
+        try {
+            userService.saveUser(user);
+            return new ResponseEntity<>(user, HttpStatus.CREATED);
+        } catch (Exception e) {
+            return new ResponseEntity<>(HttpStatus.NOT_IMPLEMENTED);
+        }
+    }
 
-        userService.saveUser(user);
-        return new ResponseEntity<>(user, HttpStatus.CREATED);
-
+    @GetMapping("/login")
+    public String login() {
+        return "/login";
     }
 
 
