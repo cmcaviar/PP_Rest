@@ -1,6 +1,5 @@
 package ru.kata.spring.boot_security.demo.models;
 
-import com.fasterxml.jackson.annotation.JsonBackReference;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.stereotype.Component;
 import javax.persistence.*;
@@ -15,7 +14,6 @@ public class Role implements GrantedAuthority {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "id")
     private int id;
     @Column(name = "name")
     private String name;
@@ -27,6 +25,7 @@ public class Role implements GrantedAuthority {
 
     public Role() {
     }
+
 
 
     public int getId() {
@@ -60,7 +59,7 @@ public class Role implements GrantedAuthority {
 
     @Override
     public String toString() {
-        return getName().replaceAll("ROLE_", "");
+        return name;
     }
 
     @Override

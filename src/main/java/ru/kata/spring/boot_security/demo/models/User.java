@@ -53,6 +53,24 @@ public class User implements UserDetails {
     public User() {
     }
 
+    public User(int id, String username, String name, String lastName, int age, String password, Set<Role> roles) {
+        this.id = id;
+        this.username = username;
+        this.name = name;
+        this.lastName = lastName;
+        this.age = age;
+        this.password = password;
+        this.roles = roles;
+    }
+
+    public User(String username, String name, String lastName, int age, String password, Set<Role> roles) {
+        this.username = username;
+        this.name = name;
+        this.lastName = lastName;
+        this.age = age;
+        this.password = password;
+        this.roles = roles;
+    }
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
@@ -136,11 +154,6 @@ public class User implements UserDetails {
     }
 
 
-
-    public String getRolesToString() {
-        String s = getRoles().toString().replaceAll("^\\[|\\]$", "");
-        return s.replace("ROLE_", "");
-    }
 
 
     @Override

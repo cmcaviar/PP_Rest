@@ -11,19 +11,19 @@ import java.security.Principal;
 
 @Controller
 public class UserController {
-    private final UserService userService;
-
-    @Autowired
-    public UserController(UserService userService) {
-        this.userService = userService;
-    }
-
-    @GetMapping("/user")
-    public String userPage(Model model, Principal principal) {
-        UserDetails user = userService.loadUserByUsername(principal.getName());
-        model.addAttribute("user", user);
-        return "/usertest";
-    }
+//    private final UserService userService;
+//
+//    @Autowired
+//    public UserController(UserService userService) {
+//        this.userService = userService;
+//    }
+//
+//    @GetMapping("/user")
+//    public String userPage(Model model, Principal principal) {
+//        UserDetails user = userService.loadUserByUsername(principal.getName());
+//        model.addAttribute("user", user);
+//        return "user";
+//    }
 
     @GetMapping("/login")
     public String login() {
