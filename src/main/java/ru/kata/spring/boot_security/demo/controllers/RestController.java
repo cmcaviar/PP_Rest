@@ -3,6 +3,7 @@ package ru.kata.spring.boot_security.demo.controllers;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
 import ru.kata.spring.boot_security.demo.models.Role;
@@ -22,7 +23,7 @@ public class RestController {
     public RestController(UserService userService) {
         this.userService = userService;
     }
-
+    @PreAuthorize("hasRole('ROLE_ADMIN')")
     @GetMapping("/users")
     public ResponseEntity<List<User>> showAllUsers() {
         try {
@@ -32,7 +33,7 @@ public class RestController {
         }
     }
 
-
+    @PreAuthorize("hasRole('ROLE_ADMIN')")
     @GetMapping("/users/{id}")
     public ResponseEntity<User> showUser(@PathVariable("id") int id) {
         try {
@@ -41,7 +42,7 @@ public class RestController {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
     }
-
+    @PreAuthorize("hasRole('ROLE_ADMIN')")
     @PostMapping("/users")
     public ResponseEntity<User> addUser(@RequestBody User user) {
         try {
@@ -57,7 +58,7 @@ public class RestController {
         return "/login";
     }
 
-
+    @PreAuthorize("hasRole('ROLE_ADMIN')")
     @PutMapping("/users/{id}")
     public ResponseEntity<User> updateUser(@RequestBody User user, @PathVariable("id") int id) {
         try {
@@ -68,22 +69,24 @@ public class RestController {
         }
     }
 
-
+    @PreAuthorize("hasRole('ROLE_ADMIN')")
     @DeleteMapping("users/{id}")
     public ResponseEntity<?> deleteUser(@PathVariable("id") int id) {
         userService.deleteUserById(id);
         return ResponseEntity.ok().build();
     }
 
+    @PreAuthorize("hasAnyRole('ROLE_ADMIN', 'ROLE_USER')")
     @GetMapping("/user")
     public ResponseEntity<User> showUserPage(Authentication auth) {
         return new ResponseEntity<>((User) auth.getPrincipal(), HttpStatus.OK);
     }
+    @PreAuthorize("hasRole('ROLE_ADMIN')")
     @GetMapping("/roles")
     public ResponseEntity<List<Role>> getAllRoles() {
         return new ResponseEntity<>(userService.listRoles(), HttpStatus.OK);
     }
-
+    @PreAuthorize("hasRole('ROLE_ADMIN')")
     @GetMapping("/roles/{id}")
     ResponseEntity<Role> getRoleById(@PathVariable("id") int id){
         return new ResponseEntity<>(userService.getRoleById(id), HttpStatus.OK);
